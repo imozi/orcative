@@ -1,0 +1,23 @@
+{
+  "name": "orcative",
+  "version": "0.0.2",
+  "type": "module",
+  "files": [
+    "README.md"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "ozi",
+    "email": "zaytsevoi.90@gmail.com",
+    "url": "https://github.com/imozi"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imozi/orcative.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/imozi/orcative#readme",
+  "bugs": {
+    "url": "https://github.com/imozi/orcative/issues"
+  }
+}

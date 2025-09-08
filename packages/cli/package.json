@@ -1,0 +1,14 @@
+{
+  "name": "@orcative/cli",
+  "version": "0.0.2",
+  "bin": {
+    "orcative": "bin/index.js"
+  },
+  "type": "module",
+  "files": [
+    "bin",
+    "README.md"
+  ],
+  "license": "MIT",
+  "packageManager": "pnpm@10.15.1"
+}
