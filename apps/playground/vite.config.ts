@@ -11,6 +11,7 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
       '@orcative/ui': fileURLToPath(new URL('../../packages/ui/src', import.meta.url)),
+      '@orcative/use': fileURLToPath(new URL('../../packages/use/src', import.meta.url)),
     },
   },
 });

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@orcative/ui": "workspace:*",
+    "@orcative/use": "workspace:*",
     "vue": "^3.5.21"
   },
   "devDependencies": {
