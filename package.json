@@ -4,6 +4,8 @@
   "description": "orcative monorepo",
   "scripts": {
     "playground": "pnpm --filter playground dev",
+    "docs:dev": "pnpm --filter docs dev",
+    "build:docs": "pnpm --filter docs build",
     "build:ui": "pnpm --filter ui build"
   },
   "keywords": [],
