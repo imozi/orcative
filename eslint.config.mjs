@@ -1,4 +1,5 @@
-// eslint.config.mjs
+// eslint.config.js
+import { defineConfig } from 'eslint/config';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import prettierPlugin from 'eslint-plugin-prettier';
@@ -32,7 +33,7 @@ const commonRules = {
   ],
 };
 
-export default [
+export default defineConfig([
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
@@ -50,8 +51,6 @@ export default [
       ...commonRules,
     },
   },
-
-  // Для .vue файлов
   {
     files: ['**/*.vue'],
     languageOptions: {
@@ -77,4 +76,4 @@ export default [
       'vue/multi-word-component-names': 'off',
     },
   },
-];
+]);
