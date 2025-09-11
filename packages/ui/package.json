@@ -1,6 +1,6 @@
 {
   "name": "@orcative/ui",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
@@ -30,10 +30,12 @@
     "tailwindcss": "^4.0.0",
     "vue": "^3.5.0",
     "tailwind-merge": "^3.3.1",
-    "tailwind-variants": "^3.1.1"
+    "tailwind-variants": "^3.1.1",
+    "@orcative/use": "workspace:*"
   },
   "dependencies": {},
   "devDependencies": {
+    "@orcative/use": "workspace:*",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.7.0",
     "typescript": "~5.9.2",

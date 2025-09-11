@@ -11,7 +11,6 @@ import vueParser from 'vue-eslint-parser';
 const commonRules = {
   '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
   '@typescript-eslint/no-explicit-any': 'error',
-  '@typescript-eslint/explicit-function-return-type': 'warn',
   '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
   'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
   'prettier/prettier': 'error',
