@@ -1,21 +1,15 @@
 <script setup lang="ts">
-import { tv } from 'tailwind-variants';
-import { type HTMLAttributes } from 'vue';
+import { Primitive, type PrimitiveProps } from '../primitive';
 
-export interface PlaceholderProps {
+export interface PlaceholderProps extends PrimitiveProps {
   picture?: boolean;
-  class?: HTMLAttributes['class'];
 }
 
-const props = defineProps<PlaceholderProps>();
-
-const tvPlaceholder = tv({
-  base: 'relative w-full overflow-hidden rounded-sm border-black/10 text-black',
-});
+const { picture, ...props } = defineProps<PlaceholderProps>();
 </script>
 
 <template>
-  <div :class="tvPlaceholder({ class: props.class })">
+  <Primitive class="relative h-full w-full overflow-hidden rounded-sm border-black/10 text-black" v-bind="props">
     <div class="h-full w-full rounded-[inherit] border border-dashed border-inherit">
       <svg class="absolute inset-0 h-full w-full" fill="none" stroke="currentColor">
         <defs>
@@ -25,14 +19,7 @@ const tvPlaceholder = tv({
         </defs>
         <rect stroke="none" fill="url(#pattern-5c1e4f0e-62d5-498b-8ff0-cf77bb448c8e)" fill-opacity="0.1" width="100%" height="100%"></rect>
       </svg>
-      <svg
-        v-if="props.picture"
-        class="relative z-10 h-full w-full"
-        viewBox="0 0 800 800"
-        fill="none"
-        fill-opacity="0.2"
-        stroke-opacity="0.2"
-      >
+      <svg v-if="picture" class="relative z-10 h-full w-full" viewBox="0 0 800 800" fill="none" fill-opacity="0.2" stroke-opacity="0.2">
         <g id="lines" stroke-opacity="inherit" stroke-width="2.5">
           <path d="M551.375 552.739L245.911 247.277" stroke="url(#paint0_linear_696_70)" />
           <path d="M245.91 552.74L551.373 247.277" stroke="url(#paint1_linear_696_70)" />
@@ -98,7 +85,7 @@ const tvPlaceholder = tv({
         </defs>
       </svg>
     </div>
-  </div>
+  </Primitive>
 </template>
 
 <style lang="scss"></style>

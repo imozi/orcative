@@ -8,7 +8,7 @@ import { Placeholder } from '@orcative/ui';
       <Placeholder class="h-48 w-48" />
     </div>
     <div class="bg-white p-5">
-      <Placeholder picture class="h-48 w-48" />
+      <Placeholder as="button" picture />
     </div>
   </div>
 </template>

@@ -1,185 +1,138 @@
-import { defineComponent, h, type Component, type PropType } from 'vue';
+import { tv } from 'tailwind-variants';
+import { defineComponent, h, type Component, type HTMLAttributes, type PropType, type Raw } from 'vue';
 
-// import { Slot } from './Slot';
+import { PrimitiveSlot } from './PrimitiveSlot';
 
-export const MODERN_HTML_TAGS = [
-  'a',
-  'abbr',
-  'address',
-  'area',
-  'article',
-  'aside',
-  'audio',
-  'b',
-  'base',
-  'bdi',
-  'bdo',
-  'blockquote',
-  'body',
-  'br',
-  'button',
-  'canvas',
-  'caption',
-  'cite',
-  'code',
-  'col',
-  'colgroup',
-  'data',
-  'datalist',
-  'dd',
-  'del',
-  'details',
-  'dfn',
-  'dialog',
-  'div',
-  'dl',
-  'dt',
-  'em',
-  'embed',
-  'fieldset',
-  'figcaption',
-  'figure',
-  'footer',
-  'form',
-  'h1',
-  'h2',
-  'h3',
-  'h4',
-  'h5',
-  'h6',
-  'head',
-  'header',
-  'hr',
-  'html',
-  'i',
-  'iframe',
-  'img',
-  'input',
-  'ins',
-  'kbd',
-  'label',
-  'legend',
-  'li',
-  'link',
-  'main',
-  'map',
-  'mark',
-  'menu',
-  'meta',
-  'meter',
-  'nav',
-  'noscript',
-  'object',
-  'ol',
-  'optgroup',
-  'option',
-  'output',
-  'p',
-  'picture',
-  'pre',
-  'progress',
-  'q',
-  'rp',
-  'rt',
-  'rtc',
-  'ruby',
-  's',
-  'samp',
-  'script',
-  'section',
-  'select',
-  'small',
-  'source',
-  'span',
-  'strong',
-  'style',
-  'sub',
-  'summary',
-  'sup',
-  'table',
-  'tbody',
-  'td',
-  'template',
-  'textarea',
-  'tfoot',
-  'th',
-  'thead',
-  'time',
-  'title',
-  'tr',
-  'track',
-  'u',
-  'ul',
-  'var',
-  'video',
-  'wbr',
-] as const;
+const SELF_CLOSING_TAGS = new Set(['area', 'br', 'col', 'embed', 'hr', 'img', 'input', 'source', 'track', 'wbr']);
 
-export const OBSOLETE_HTML_TAGS = [
-  'acronym',
-  'applet',
-  'basefont',
-  'big',
-  'center',
-  'dir',
-  'font',
-  'frame',
-  'frameset',
-  'isindex',
-  'keygen',
-  'marquee',
-  'menuitem',
-  'noframes',
-  'nobr',
-  'plaintext',
-  'strike',
-  'tt',
-  'xmp',
-] as const;
-
-export const VOID_HTML_TAGS = [
-  'area',
-  'base',
-  'br',
-  'col',
-  'embed',
-  'hr',
-  'img',
-  'input',
-  'link',
-  'meta',
-  'param',
-  'source',
-  'track',
-  'wbr',
-] as const;
-
-export type AsTag =
-  | 'a'
-  | 'button'
-  | 'div'
-  | 'form'
+type HTMLElements =
+  // Headings
+  | 'h1'
   | 'h2'
   | 'h3'
-  | 'img'
-  | 'input'
-  | 'label'
-  | 'li'
-  | 'nav'
-  | 'ol'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+
+  // Structure & sections
   | 'p'
+  | 'address'
+  | 'blockquote'
+  | 'q'
+  | 'div'
   | 'span'
+  | 'header'
+  | 'footer'
+  | 'main'
+  | 'section'
+  | 'article'
+  | 'aside'
+  | 'nav'
+  | 'search'
+  | 'hgroup'
+
+  // Text content
+  | 'br'
+  | 'wbr'
+  | 'hr'
+  | 'b'
+  | 'i'
+  | 's'
+  | 'u'
+  | 'small'
+  | 'strong'
+  | 'em'
+  | 'mark'
+  | 'cite'
+  | 'sub'
+  | 'sup'
+  | 'del'
+  | 'ins'
+  | 'kbd'
+  | 'var'
+  | 'dfn'
+  | 'samp'
+  | 'abbr'
+  | 'code'
+  | 'pre'
+  | 'ruby'
+  | 'rt'
+  | 'rp'
+  | 'rtc'
+  | 'bdo'
+  | 'bdi'
+  | 'time'
+  | 'data'
+  | 'output'
+
+  // Forms
+  | 'form'
+  | 'input'
+  | 'textarea'
+  | 'button'
+  | 'select'
+  | 'option'
+  | 'optgroup'
+  | 'datalist'
+  | 'label'
+  | 'fieldset'
+  | 'legend'
+
+  // Media & graphics
+  | 'img'
+  | 'figure'
+  | 'figcaption'
+  | 'picture'
+  | 'source'
   | 'svg'
+  | 'canvas'
+  | 'audio'
+  | 'video'
+  | 'iframe'
+  | 'embed'
+  | 'object'
+  | 'track'
+
+  // Links & maps
+  | 'a'
+  | 'map'
+  | 'area'
+
+  // Lists
+  | 'ol'
   | 'ul'
+  | 'li'
+  | 'dl'
+  | 'dt'
+  | 'dd'
+
+  // Tables
+  | 'table'
+  | 'thead'
+  | 'tbody'
+  | 'tfoot'
+  | 'tr'
+  | 'th'
+  | 'td'
+  | 'caption'
+  | 'col'
+  | 'colgroup'
+
+  // Interactive / semantic
+  | 'details'
+  | 'summary'
+  | 'dialog'
   | 'template'
-  | ({} & string); // any other string
+
+  // Misc
+  | 'meter'
+  | 'progress';
 
 export interface PrimitiveProps {
+  class?: HTMLAttributes['class'];
   asChild?: boolean;
-  as?: AsTag | Component;
+  as?: HTMLElements | Component | Raw<Component>;
 }
-
-const SELF_CLOSING_TAGS = ['area', 'img', 'input'];
 
 export const Primitive = defineComponent({
   name: 'Primitive',
@@ -189,17 +142,28 @@ export const Primitive = defineComponent({
       default: false,
     },
     as: {
-      type: [String, Object] as PropType<AsTag | Component>,
+      type: [String, Object] as PropType<HTMLElements | Component | Raw<Component>>,
       default: 'div',
+    },
+    class: {
+      type: String,
+      default: '',
     },
   },
   setup(props, { attrs, slots }) {
     const asTag = props.asChild ? 'template' : props.as;
+    const primitiveTv = tv({ base: '' });
+    const attrsWithClass = { ...attrs, class: primitiveTv({ class: props.class }) };
 
-    if (typeof asTag === 'string' && SELF_CLOSING_TAGS.includes(asTag)) return () => h(asTag, attrs);
-
-    if (asTag !== 'template') return () => h(props.as, attrs, { default: slots.default });
-
-    // return () => h(Slot, attrs, { default: slots.default });
+    return () => {
+      switch (true) {
+        case typeof asTag === 'string' && SELF_CLOSING_TAGS.has(asTag):
+          return h(asTag, attrsWithClass);
+        case asTag !== 'template':
+          return h(props.as, attrsWithClass, { default: slots.default });
+        default:
+          return h(PrimitiveSlot, attrsWithClass, { default: slots.default });
+      }
+    };
   },
 });
