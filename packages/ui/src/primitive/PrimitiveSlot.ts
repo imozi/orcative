@@ -1,13 +1,9 @@
-import { cloneVNode, Comment, defineComponent, Fragment, mergeProps, type VNode } from 'vue';
-const renderSlotFragments = (children?: VNode[]): VNode[] => {
+import { cloneVNode, Comment, Fragment, defineComponent, mergeProps, type VNode } from 'vue';
+
+function renderSlotFragments(children?: VNode[]): VNode[] {
   if (!children) return [];
-
-  return children.flatMap((child) => {
-    if (child.type === Fragment) return renderSlotFragments(child.children as VNode[]);
-
-    return [child];
-  });
-};
+  return children.flatMap((child) => (child.type === Fragment ? renderSlotFragments(child.children as VNode[]) : [child]));
+}
 
 export const PrimitiveSlot = defineComponent({
   name: 'PrimitiveSlot',
@@ -18,32 +14,20 @@ export const PrimitiveSlot = defineComponent({
 
       const children = renderSlotFragments(slots.default());
 
-      if (children.length === 0) {
-        return null;
-      }
+      if (children.length === 0) return null;
 
       const nonCommentChildIndex = children.findIndex((child) => child.type !== Comment);
 
-      if (nonCommentChildIndex === -1) {
-        return children;
-      }
+      if (nonCommentChildIndex === -1) return null;
 
       const nonCommentChild = children[nonCommentChildIndex];
 
+      if (nonCommentChild.props?.ref) {
+        delete nonCommentChild.props.ref;
+      }
+
       const mergedProps = nonCommentChild.props ? mergeProps(attrs, nonCommentChild.props) : attrs;
-
-      if (attrs.class && nonCommentChild.props?.class) {
-        delete nonCommentChild.props.class;
-      }
-
-      const cloned = cloneVNode(nonCommentChild, mergedProps);
-
-      for (const prop in mergedProps) {
-        if (prop.startsWith('on')) {
-          cloned.props ||= {};
-          cloned.props[prop] = mergedProps[prop];
-        }
-      }
+      const cloned = cloneVNode({ ...nonCommentChild, props: {} }, mergedProps);
 
       if (children.length === 1) {
         return cloned;

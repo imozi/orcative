@@ -1,5 +1,5 @@
 import { tv } from 'tailwind-variants';
-import { defineComponent, h, type Component, type HTMLAttributes, type PropType, type Raw } from 'vue';
+import { defineComponent, h, mergeProps, type Component, type HTMLAttributes, type PropType, type Raw } from 'vue';
 
 import { PrimitiveSlot } from './PrimitiveSlot';
 
@@ -146,16 +146,17 @@ export const Primitive = defineComponent({
       default: 'div',
     },
     class: {
-      type: String,
+      type: String as PropType<HTMLAttributes['class']>,
       default: '',
     },
   },
   setup(props, { attrs, slots }) {
     const asTag = props.asChild ? 'template' : props.as;
     const primitiveTv = tv({ base: '' });
-    const attrsWithClass = { ...attrs, class: primitiveTv({ class: props.class }) };
 
     return () => {
+      const attrsWithClass = mergeProps(attrs, { class: primitiveTv({ class: props.class }) });
+
       switch (true) {
         case typeof asTag === 'string' && SELF_CLOSING_TAGS.has(asTag):
           return h(asTag, attrsWithClass);
