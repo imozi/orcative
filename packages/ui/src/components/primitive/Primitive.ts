@@ -129,7 +129,6 @@ type HTMLElements =
   | 'progress';
 
 export interface PrimitiveProps {
-  class?: HTMLAttributes['class'];
   asChild?: boolean;
   as?: HTMLElements | Component | Raw<Component>;
 }
@@ -145,17 +144,13 @@ export const Primitive = defineComponent({
       type: [String, Object] as PropType<HTMLElements | Component | Raw<Component>>,
       default: 'div',
     },
-    class: {
-      type: String as PropType<HTMLAttributes['class']>,
-      default: '',
-    },
   },
   setup(props, { attrs, slots }) {
     const asTag = props.asChild ? 'template' : props.as;
     const primitiveTv = tv({ base: '' });
 
     return () => {
-      const attrsWithClass = mergeProps(attrs, { class: primitiveTv({ class: props.class }) });
+      const attrsWithClass = mergeProps(attrs, { class: primitiveTv({ class: attrs.class as HTMLAttributes['class'] }) });
 
       switch (true) {
         case typeof asTag === 'string' && SELF_CLOSING_TAGS.has(asTag):

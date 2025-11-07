@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { useAttrs, useId } from 'vue';
+import { tv } from 'tailwind-variants';
+import { useAttrs, useId, type HTMLAttributes, type PropType } from 'vue';
 
 import { Primitive, type PrimitiveProps } from '../primitive';
 
@@ -11,9 +12,26 @@ defineOptions({
   inheritAttrs: false,
 });
 
-const props = defineProps<PlaceholderProps>();
+const props = defineProps({
+  asChild: {
+    type: Boolean as PropType<PlaceholderProps['asChild']>,
+    default: false,
+  },
+  as: {
+    type: [String, Object] as PropType<PlaceholderProps['as']>,
+    default: 'div',
+  },
+  picture: {
+    type: Boolean as PropType<PlaceholderProps['picture']>,
+    default: false,
+  },
+});
 const attrs = useAttrs();
 const uid = useId();
+
+const placeholderTv = tv({
+  base: 'relative h-full w-full overflow-hidden rounded-sm border-black/10 text-[var(--color-placeholder,var(--color-slate-800))] dark:text-[var(--color-placeholder,var(--color-slate-100))]',
+});
 
 const svgIds = {
   pattern: `pattern-${uid}`,
@@ -26,13 +44,12 @@ const svgIds = {
 
 <template>
   <Primitive
-    :class="[
-      'relative h-full w-full overflow-hidden rounded-sm border-black/10 text-[var(--color-placeholder,var(--color-slate-800))] dark:text-[var(--color-placeholder,var(--color-slate-100))]',
-      props.class,
-    ]"
     :as="props.as"
     :as-child="props.asChild"
-    v-bind="attrs"
+    v-bind="{
+      ...attrs,
+      class: placeholderTv({ class: attrs.class as HTMLAttributes['class'] }),
+    }"
   >
     <div class="h-full w-full rounded-[inherit] border border-dashed border-inherit">
       <svg class="absolute inset-0 h-full w-full" fill="none" stroke="currentColor">

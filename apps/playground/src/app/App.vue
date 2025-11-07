@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button } from '@orcative/ui';
 
-import { Placeholder } from '../components/placeholder';
+// import { Placeholder } from '../components/placeholder';
 
 type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
@@ -9,13 +9,13 @@ const size = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'] as Size[];
 </script>
 
 <template>
-  <Placeholder />
+  <!-- <Placeholder /> -->
   <div class="grid justify-items-start gap-2 p-10 outline-amber-500">
-    <Button size="lg">Default</Button>
-    <Button variant="subtle">Outline</Button>
+    <Button>Войти</Button>
+    <!-- <Button variant="subtle">Outline</Button> -->
   </div>
   <div class="grid justify-items-start gap-2 p-10">
-    <Button v-for="value in size" :size="value" variant="outline" :icon="true" :key="value">
+    <!-- <Button v-for="value in size" :size="value" variant="outline" :icon="true" :key="value">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
         <rect width="24" height="24" fill="none" />
         <path
@@ -25,11 +25,11 @@ const size = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'] as Size[];
           clip-rule="evenodd"
         />
       </svg>
-    </Button>
+    </Button> -->
   </div>
   <div class="grid justify-items-start gap-2 p-10">
-    <Button v-for="value in size" :size="value" :key="value" variant="outline"> Default </Button>
+    <Button v-for="value in size" :size="value" :key="value" loading> Зарегистрироваться </Button>
   </div>
 </template>
 
-<style lang="css"></style>
+<style lang="scss"></style>
