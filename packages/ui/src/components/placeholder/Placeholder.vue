@@ -4,7 +4,7 @@ import { useAttrs, useId, type HTMLAttributes, type PropType } from 'vue';
 
 import { Primitive, type PrimitiveProps } from '../primitive';
 
-export interface PlaceholderProps extends PrimitiveProps {
+interface PlaceholderProps extends PrimitiveProps {
   picture?: boolean;
 }
 
