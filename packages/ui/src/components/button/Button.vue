@@ -3,6 +3,7 @@ import { tv, type VariantProps } from 'tailwind-variants';
 import { useAttrs, type HTMLAttributes, type PropType } from 'vue';
 
 import { Primitive, type PrimitiveProps } from '../primitive';
+import { Spinner } from '../spinner';
 
 type ButtonVariants = VariantProps<typeof buttonTv>;
 
@@ -15,48 +16,111 @@ interface ButtonProps extends PrimitiveProps {
   loading: ButtonVariants['loading'];
 }
 
-const buttonTv = tv({
-  base:
-    'inline-flex cursor-pointer items-center justify-center rounded-md font-medium transition-all ' +
-    'duration-(--duration-default) ease-(--transition-easing) focus-visible:outline-4 active:translate-y-0.5 ' +
-    'has-[>svg]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0',
-  variants: {
-    color: {
-      neutral: '',
-      primary: '',
-      secondary: '',
-      success: '',
-      info: '',
-      warning: '',
-      error: '',
-    },
-    variant: {
-      solid: '',
-      outline: '',
-      soft: '',
-      subtle: '',
-      ghost: '',
-    },
-    size: {
-      xs: 'px-2 py-1.5 text-xs has-[>svg]:px-2 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-4',
-      sm: 'px-2.5 py-1.5 text-sm has-[>svg]:px-2.5 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-5',
-      md: 'px-3 py-1.5 text-base has-[>svg]:px-2.5 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-6',
-      lg: 'px-3.5 py-1.5 text-lg has-[>svg]:px-3 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-7',
-      xl: 'px-4 py-2 text-xl has-[>svg]:px-3 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-8',
-      '2xl': 'px-4.5 py-2 text-2xl has-[>svg]:px-3.5 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-9',
-      '3xl': 'px-5 py-2 text-3xl has-[>svg]:px-4 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-10',
-    },
-    disabled: {
-      true: 'pointer-events-none cursor-not-allowed opacity-70',
-    },
-    loading: {
-      true: 'pointer-events-none cursor-wait opacity-80',
-    },
-    icon: {
-      true: 'has-[>svg]:p-1.5',
-    },
+const colorTokens = [
+  {
+    base: 'primary',
+    fallback: 'blue',
   },
-  compoundVariants: [
+  {
+    base: 'secondary',
+    fallback: 'zinc',
+  },
+  {
+    base: 'success',
+    fallback: 'green',
+  },
+  {
+    base: 'info',
+    fallback: 'sky',
+  },
+  {
+    base: 'warning',
+    fallback: 'orange',
+  },
+  {
+    base: 'error',
+    fallback: 'red',
+  },
+];
+
+const generateColorVariants = () => {
+  const schema = colorTokens.reduce(
+    (acc, { base, fallback }) => {
+      const solid = {
+        color: base,
+        variant: 'solid',
+        class:
+          `text-background dark:text-foreground bg-[var(--color-${base},var(--color-${fallback}-700))] ` +
+          `focus-visible:outline-[var(--color-${base},var(--color-${fallback}-700))]/30 ` +
+          `dark:focus-visible:outline-[var(--color-${base},var(--color-${fallback}-100))]/30 ` +
+          `in-hover:hover:bg-[var(--color-${base},var(--color-${fallback}-700))]/90 ` +
+          `dark:in-hover:hover:bg-[var(--color-${base},var(--color-${fallback}-700))]/85 `,
+      };
+
+      const outline = {
+        color: base,
+        variant: 'outline',
+        class:
+          `bg-transparent text-[var(--color-${base},var(--color-${fallback}-700))] ` +
+          `dark:text-[var(--color-${base}-foreground,var(--color-${fallback}-600))] ` +
+          `ring-1 ring-[var(--color-${base},var(--color-${fallback}-700))]/30 ring-inset ` +
+          `dark:ring-[var(--color-${base}-foreground,var(--color-${fallback}-600))]/25 ` +
+          `focus-visible:outline-[var(--color-${base},var(--color-${fallback}-700))]/30 ` +
+          `dark:focus-visible:outline-[var(--color-${base}-foreground,var(--color-${fallback}-100))]/30 ` +
+          `in-hover:hover:bg-[var(--color-${base},var(--color-${fallback}-800))]/8 ` +
+          `dark:in-hover:hover:bg-[var(--color-${base}-foreground,var(--color-${fallback}-700))]/8 `,
+      };
+
+      const soft = {
+        color: base,
+        variant: 'soft',
+        class:
+          `text-[var(--color-${base},var(--color-${fallback}-700))] ` +
+          `dark:text-[var(--color-${base}-foreground,var(--color-${fallback}-600))] ` +
+          `bg-[var(--color-${base},var(--color-${fallback}-700))]/10 ` +
+          `dark:bg-[var(--color-${base}-foreground,var(--color-${fallback}-600))]/10 ` +
+          `focus-visible:outline-[var(--color-${base},var(--color-${fallback}-700))]/30 ` +
+          `dark:focus-visible:outline-[var(--color-${base}-foreground,var(--color-${fallback}-100))]/30 ` +
+          `in-hover:hover:bg-[var(--color-${base},var(--color-${fallback}-800))]/15 ` +
+          `dark:in-hover:hover:bg-[var(--color-${base}-foreground,var(--color-${fallback}-600))]/15 `,
+      };
+
+      const subtle = {
+        color: base,
+        variant: 'subtle',
+        class:
+          `text-[var(--color-${base},var(--color-${fallback}-700))] ` +
+          `dark:text-[var(--color-${base}-foreground,var(--color-${fallback}-600))] ` +
+          `ring-1 ring-[var(--color-${base},var(--color-${fallback}-700))]/30 ring-inset ` +
+          `dark:ring-[var(--color-${base}-foreground,var(--color-${fallback}-600))]/25 ` +
+          `bg-[var(--color-${base},var(--color-${fallback}-700))]/10 ` +
+          `dark:bg-[var(--color-${base}-foreground,var(--color-${fallback}-600))]/10 ` +
+          `focus-visible:outline-[var(--color-${base},var(--color-${fallback}-700))]/30 ` +
+          `dark:focus-visible:outline-[var(--color-${base}-foreground,var(--color-${fallback}-100))]/30 ` +
+          `in-hover:hover:bg-[var(--color-${base},var(--color-${fallback}-800))]/15 ` +
+          `dark:in-hover:hover:bg-[var(--color-${base}-foreground,var(--color-${fallback}-600))]/15 `,
+      };
+
+      const ghost = {
+        color: base,
+        variant: 'ghost',
+        class:
+          `bg-transparent text-[var(--color-${base},var(--color-${fallback}-700))] ` +
+          `dark:text-[var(--color-${base}-foreground,var(--color-${fallback}-600))] ` +
+          `focus-visible:outline-[var(--color-${base},var(--color-${fallback}-700))]/30 ` +
+          `dark:focus-visible:outline-[var(--color-${base}-foreground,var(--color-${fallback}-100))]/30 ` +
+          `in-hover:hover:bg-[var(--color-${base},var(--color-${fallback}-800))]/10 ` +
+          `dark:in-hover:hover:bg-[var(--color-${base}-foreground,var(--color-${fallback}-700))]/10 `,
+      };
+
+      acc.push(solid, outline, soft, subtle, ghost);
+
+      return acc;
+    },
+    [] as { [key: string]: string }[],
+  );
+
+  const neutral = [
     {
       color: 'neutral',
       variant: 'solid',
@@ -119,131 +183,65 @@ const buttonTv = tv({
         'in-hover:hover:bg-[var(--color-neutral,var(--color-neutral-800))]/7 ' +
         'dark:in-hover:hover:bg-[var(--color-neutral-foreground,var(--color-neutral-100))]/10',
     },
-    {
-      color: 'primary',
-      variant: 'solid',
-      class:
-        'text-background dark:text-foreground bg-[var(--color-primary,var(--color-blue-700))] ' +
-        'focus-visible:outline-[var(--color-primary,var(--color-blue-900))]/30 ' +
-        'dark:focus-visible:outline-[var(--color-primary,var(--color-blue-100))]/30 ' +
-        'in-hover:hover:bg-[var(--color-primary,var(--color-blue-700))]/90 ' +
-        'dark:in-hover:hover:bg-[var(--color-primary,var(--color-blue-700))]/85',
+  ];
+
+  const link = {
+    variant: 'link',
+    class:
+      `text-[var(--color-link,var(--color-blue-500))] p-0 underline-offset-4 ` +
+      `focus-visible:outline-none focus-visible:underline in-hover:hover:text-[var(--color-link-foreground,var(--color-blue-600))] ` +
+      `in-hover:hover:underline`,
+  };
+
+  schema.unshift(...neutral);
+  schema.push(link);
+
+  return schema;
+};
+
+const buttonTv = tv({
+  base:
+    'inline-flex cursor-pointer items-center justify-center rounded-md font-medium transition-all ' +
+    'duration-(--duration-default) ease-(--transition-easing) focus-visible:outline-4 active:translate-y-0.5 ' +
+    'bg- has-[>svg]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  variants: {
+    color: {
+      neutral: '',
+      primary: '',
+      secondary: '',
+      success: '',
+      info: '',
+      warning: '',
+      error: '',
     },
-    {
-      color: 'primary',
-      variant: 'outline',
-      class:
-        'bg-transparent text-[var(--color-primary,var(--color-blue-700))] ' +
-        'dark:text-[var(--color-primary-foreground,var(--color-blue-600))] ' +
-        'ring-1 ring-[var(--color-primary,var(--color-blue-700))]/30 ring-inset ' +
-        'dark:ring-[var(--color-primary-foreground,var(--color-blue-600))]/25 ' +
-        'focus-visible:outline-[var(--color-primary,var(--color-blue-700))]/30 ' +
-        'dark:focus-visible:outline-[var(--color-primary-foreground,var(--color-blue-100))]/30 ' +
-        'in-hover:hover:bg-[var(--color-primary,var(--color-blue-800))]/8 ' +
-        'dark:in-hover:hover:bg-[var(--color-primary-foreground,var(--color-blue-700))]/8',
+    variant: {
+      solid: '',
+      outline: '',
+      soft: '',
+      subtle: '',
+      ghost: '',
+      link: '',
     },
-    {
-      color: 'primary',
-      variant: 'soft',
-      class:
-        'text-[var(--color-primary,var(--color-blue-700))] ' +
-        'dark:text-[var(--color-primary-foreground,var(--color-blue-600))] ' +
-        'bg-[var(--color-primary,var(--color-blue-700))]/10 ' +
-        'dark:bg-[var(--color-primary-foreground,var(--color-blue-600))]/10 ' +
-        'focus-visible:outline-[var(--color-primary,var(--color-blue-900))]/30 ' +
-        'dark:focus-visible:outline-[var(--color-primary-foreground,var(--color-blue-100))]/30 ' +
-        'in-hover:hover:bg-[var(--color-primary,var(--color-blue-800))]/15 ' +
-        'dark:in-hover:hover:bg-[var(--color-primary-foreground,var(--color-blue-600))]/15',
+    size: {
+      xs: 'px-2 py-1.5 text-xs has-[>svg]:px-2 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-4',
+      sm: 'px-2.5 py-1.5 text-sm has-[>svg]:px-2.5 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-5',
+      md: 'px-3 py-1.5 text-base has-[>svg]:px-2.5 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-6',
+      lg: 'px-3.5 py-1.5 text-lg has-[>svg]:px-3 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-7',
+      xl: 'px-4 py-2 text-xl has-[>svg]:px-3 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-8',
+      '2xl': 'px-4.5 py-2 text-2xl has-[>svg]:px-3.5 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-9',
+      '3xl': 'px-5 py-2 text-3xl has-[>svg]:px-4 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-10',
     },
-    {
-      color: 'primary',
-      variant: 'subtle',
-      class:
-        'text-[var(--color-primary,var(--color-blue-700))] ' +
-        'dark:text-[var(--color-primary-foreground,var(--color-blue-600))] ' +
-        'ring-1 ring-[var(--color-primary,var(--color-blue-700))]/30 ring-inset ' +
-        'dark:ring-[var(--color-primary-foreground,var(--color-blue-600))]/25 ' +
-        'bg-[var(--color-primary,var(--color-blue-700))]/10 ' +
-        'dark:bg-[var(--color-primary-foreground,var(--color-blue-600))]/10 ' +
-        'focus-visible:outline-[var(--color-primary,var(--color-blue-900))]/30 ' +
-        'dark:focus-visible:outline-[var(--color-primary-foreground,var(--color-blue-100))]/30 ' +
-        'in-hover:hover:bg-[var(--color-primary,var(--color-blue-800))]/15 ' +
-        'dark:in-hover:hover:bg-[var(--color-primary-foreground,var(--color-blue-600))]/15',
+    disabled: {
+      true: 'pointer-events-none cursor-not-allowed opacity-70',
     },
-    {
-      color: 'primary',
-      variant: 'ghost',
-      class:
-        'bg-transparent text-[var(--color-primary,var(--color-blue-700))] ' +
-        'dark:text-[var(--color-primary-foreground,var(--color-blue-600))] ' +
-        'focus-visible:outline-[var(--color-primary,var(--color-neutral-900))]/30 ' +
-        'dark:focus-visible:outline-[var(--color-primary-foreground,var(--color-blue-100))]/30 ' +
-        'in-hover:hover:bg-[var(--color-primary,var(--color-blue-800))]/10 ' +
-        'dark:in-hover:hover:bg-[var(--color-primary-foreground,var(--color-blue-700))]/10',
+    loading: {
+      true: 'pointer-events-none cursor-wait opacity-80',
     },
-    {
-      color: 'secondary',
-      variant: 'solid',
-      class:
-        'text-background dark:text-foreground bg-[var(--color-secondary,var(--color-neutral-900))] ' +
-        'dark:bg-[var(--color-secondary,var(--color-neutral-50))] ' +
-        'focus-visible:outline-[var(--color-secondary,var(--color-neutral-900))]/30 ' +
-        'dark:focus-visible:outline-[var(--color-secondary,var(--color-neutral-100))]/30 ' +
-        'in-hover:hover:bg-[var(--color-secondary,var(--color-neutral-900))]/85 ' +
-        'dark:in-hover:hover:bg-[var(--color-secondary,var(--color-neutral-100))]/85',
+    icon: {
+      true: 'has-[>svg]:p-1.5',
     },
-    {
-      color: 'secondary',
-      variant: 'outline',
-      class:
-        'text-secondary dark:text-secondary-foreground bg-transparent ' +
-        'ring-1 ring-[var(--color-secondary,var(--color-neutral-900))]/30 ring-inset ' +
-        'dark:ring-[var(--color-secondary-foreground,var(--color-neutral-100))]/25 ' +
-        'focus-visible:outline-[var(--color-secondary,var(--color-neutral-900))]/30 ' +
-        'dark:focus-visible:outline-[var(--color-secondary-foreground,var(--color-neutral-100))]/30 ' +
-        'in-hover:hover:bg-[var(--color-secondary,var(--color-neutral-900))]/6 ' +
-        'dark:in-hover:hover:bg-[var(--color-secondary-foreground,var(--color-neutral-100))]/8',
-    },
-    {
-      color: 'secondary',
-      variant: 'soft',
-      class:
-        'text-secondary ' +
-        'dark:text-[var(--color-secondary-foreground,var(--color-neutral-100))] ' +
-        'bg-[var(--color-secondary,var(--color-neutral-950))]/5 ' +
-        'dark:bg-[var(--color-secondary-foreground,var(--color-neutral-800))]/10 ' +
-        'focus-visible:outline-[var(--color-secondary,var(--color-neutral-900))]/30 ' +
-        'dark:focus-visible:outline-[var(--color-secondary-foreground,var(--color-neutral-100))]/30 ' +
-        'in-hover:hover:bg-[var(--color-secondary,var(--color-neutral-800))]/10 ' +
-        'dark:in-hover:hover:bg-[var(--color-secondary-foreground,var(--color-neutral-100))]/15',
-    },
-    {
-      color: 'secondary',
-      variant: 'subtle',
-      class:
-        'text-secondary ' +
-        'dark:text-[var(--color-secondary-foreground,var(--color-neutral-100))] ' +
-        'ring-1 ring-[var(--color-secondary,var(--color-neutral-900))]/30 ring-inset ' +
-        'dark:ring-[var(--color-secondary-foreground,var(--color-neutral-100))]/25 ' +
-        'bg-[var(--color-secondary,var(--color-neutral-950))]/7 ' +
-        'dark:bg-[var(--color-secondary-foreground,var(--color-neutral-800))]/10 ' +
-        'focus-visible:outline-[var(--color-secondary,var(--color-neutral-900))]/30 ' +
-        'dark:focus-visible:outline-[var(--color-secondary-foreground,var(--color-neutral-100))]/30 ' +
-        'in-hover:hover:bg-[var(--color-secondary,var(--color-neutral-800))]/15 ' +
-        'dark:in-hover:hover:bg-[var(--color-secondary-foreground,var(--color-neutral-100))]/15',
-    },
-    {
-      color: 'secondary',
-      variant: 'ghost',
-      class:
-        'text-secondary bg-transparent ' +
-        'dark:text-[var(--color-secondary-foreground,var(--color-neutral-100))] ' +
-        'focus-visible:outline-[var(--color-secondary,var(--color-neutral-900))]/30 ' +
-        'dark:focus-visible:outline-[var(--color-secondary-foreground,var(--color-neutral-100))]/30 ' +
-        'in-hover:hover:bg-[var(--color-secondary,var(--color-neutral-800))]/7 ' +
-        'dark:in-hover:hover:bg-[var(--color-secondary-foreground,var(--color-neutral-100))]/10',
-    },
-  ],
+  },
+  compoundVariants: generateColorVariants(),
   defaultVariants: {
     variant: 'solid',
     color: 'neutral',
@@ -314,13 +312,7 @@ const props = defineProps({
     }"
   >
     <template v-if="props.loading">
-      <svg fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
-        <path
-          class="origin-center animate-spin"
-          d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z"
-        ></path>
-      </svg>
+      <Spinner />
     </template>
     <slot />
   </Primitive>

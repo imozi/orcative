@@ -7,10 +7,10 @@ const onClick = () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-baseline gap-5 p-5">
+  <div class="flex flex-col items-baseline justify-center gap-5 p-5">
     <OutlineBox class="flex gap-3">
-      <Button color="primary">Solid</Button>
-      <Button color="primary" icon @click="onClick">
+      <Button color="primary" loading>Solid</Button>
+      <Button color="secondary" icon @click="onClick">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -34,6 +34,9 @@ const onClick = () => {
       <Button color="primary" variant="soft">Soft</Button>
       <Button color="primary" variant="subtle">Subtle</Button>
       <Button color="primary" variant="ghost">Ghost</Button>
+      <Button variant="link" as-child>
+        <a href="#">Link</a>
+      </Button>
     </OutlineBox>
     <OutlineBox class="grid grid-cols-2 gap-3">
       <Placeholder />

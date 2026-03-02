@@ -10,7 +10,7 @@ defineOptions({
 
 const attrs = useAttrs();
 
-const placeholderTv = tv({
+const outlineBoxTv = tv({
   base: 'rounded-xs border border-dashed border-[var(--color-border,var(--color-neutral-900))]/20 p-3 dark:border-[var(--color-border,var(--color-neutral-300))]/20',
 });
 </script>
@@ -19,7 +19,7 @@ const placeholderTv = tv({
   <Primitive
     v-bind="{
       ...attrs,
-      class: placeholderTv({ class: attrs.class as HTMLAttributes['class'] }),
+      class: outlineBoxTv({ class: attrs.class as HTMLAttributes['class'] }),
     }"
   >
     <slot />
