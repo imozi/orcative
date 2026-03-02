@@ -19,5 +19,6 @@
   "homepage": "https://github.com/imozi/orcative#readme",
   "bugs": {
     "url": "https://github.com/imozi/orcative/issues"
-  }
+  },
+  "packageManager": "pnpm@10.30.3"
 }

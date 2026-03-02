@@ -16,7 +16,10 @@ interface ButtonProps extends PrimitiveProps {
 }
 
 const buttonTv = tv({
-  base: 'transition-color inline-flex cursor-pointer items-center justify-center rounded-md font-medium duration-300 focus:outline-none focus-visible:ring-4 has-[>svg]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  base:
+    'inline-flex cursor-pointer items-center justify-center rounded-md font-medium transition-all ' +
+    'duration-(--duration-default) ease-(--transition-easing) focus-visible:outline-4 active:translate-y-0.5 ' +
+    'has-[>svg]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   variants: {
     color: {
       neutral: '',
@@ -33,7 +36,6 @@ const buttonTv = tv({
       soft: '',
       subtle: '',
       ghost: '',
-      icon: '',
     },
     size: {
       xs: 'px-2 py-1.5 text-xs has-[>svg]:px-2 has-[>svg]:py-1.5 [&_svg:not([class*="size-"])]:size-4',
@@ -48,7 +50,7 @@ const buttonTv = tv({
       true: 'pointer-events-none cursor-not-allowed opacity-70',
     },
     loading: {
-      true: 'pointer-events-none cursor-wait',
+      true: 'pointer-events-none cursor-wait opacity-80',
     },
     icon: {
       true: 'has-[>svg]:p-1.5',
@@ -59,26 +61,188 @@ const buttonTv = tv({
       color: 'neutral',
       variant: 'solid',
       class:
-        'in-hover:hover:bg-[var(--color-neutral,var(--color-neutral-900))]/85 focus-visible:ring-[var(--color-neutral,var(--color-neutral-900))]/30 bg-[var(--color-neutral,var(--color-neutral-900))] text-white',
+        'text-background bg-[var(--color-neutral,var(--color-neutral-900))] ' +
+        'dark:bg-[var(--color-neutral-foreground,var(--color-neutral-50))] ' +
+        'focus-visible:outline-[var(--color-neutral,var(--color-neutral-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-neutral-foreground,var(--color-neutral-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-neutral,var(--color-neutral-900))]/85 ' +
+        'dark:in-hover:hover:bg-[var(--color-neutral-foreground,var(--color-neutral-100))]/85',
     },
-    // {
-    //   color: 'neutral',
-    //   variant: 'outline',
-    //   class:
-    //     'in-hover:hover:bg-[var(--color-neutral,var(--color-neutral-900))]/10 in-hover:hover:ring-[var(--color-neutral,var(--color-neutral-900))]/40 focus-visible:ring-[var(--color-neutral,var(--color-neutral-900))]/30 ring-[var(--color-neutral,var(--color-neutral-900))]/30 bg-white text-[var(--color-neutral,var(--color-neutral-900))] ring-1',
-    // },
-    // {
-    //   color: 'neutral',
-    //   variant: 'soft',
-    //   class:
-    //     'in-hover:hover:bg-[var(--color-neutral,var(--color-neutral-900))]/15 focus-visible:ring-[var(--color-neutral,var(--color-neutral-900))]/30 bg-[var(--color-neutral,var(--color-neutral-900))]/5 text-[var(--color-neutral,var(--color-neutral-900))]',
-    // },
-    // {
-    //   color: 'neutral',
-    //   variant: 'subtle',
-    //   class:
-    //     'in-hover:hover:bg-[var(--color-neutral,var(--color-neutral-900))]/15 inset-ring-[var(--color-neutral,var(--color-neutral-900))]/50 focus-visible:ring-[var(--color-neutral,var(--color-neutral-900))]/30 inset-ring-1 bg-[var(--color-neutral,var(--color-neutral-900))]/5 text-[var(--color-neutral,var(--color-neutral-900))]',
-    // },
+    {
+      color: 'neutral',
+      variant: 'outline',
+      class:
+        'text-foreground bg-transparent ' +
+        'ring-1 ring-[var(--color-neutral,var(--color-neutral-900))]/30 ring-inset ' +
+        'dark:ring-[var(--color-neutral-foreground,var(--color-neutral-100))]/25 ' +
+        'focus-visible:outline-[var(--color-neutral,var(--color-neutral-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-neutral-foreground,var(--color-neutral-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-neutral,var(--color-neutral-900))]/6 ' +
+        'dark:in-hover:hover:bg-[var(--color-neutral-foreground,var(--color-neutral-100))]/8',
+    },
+    {
+      color: 'neutral',
+      variant: 'soft',
+      class:
+        'text-foreground ' +
+        'dark:text-[var(--color-neutral-foreground,var(--color-neutral-100))] ' +
+        'bg-[var(--color-neutral,var(--color-neutral-950))]/5 ' +
+        'dark:bg-[var(--color-neutral,var(--color-neutral-800))]/95 ' +
+        'focus-visible:outline-[var(--color-neutral,var(--color-neutral-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-neutral-foreground,var(--color-neutral-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-neutral,var(--color-neutral-800))]/10 ' +
+        'dark:in-hover:hover:bg-[var(--color-neutral-foreground,var(--color-neutral-100))]/15',
+    },
+    {
+      color: 'neutral',
+      variant: 'subtle',
+      class:
+        'text-foreground ' +
+        'dark:text-[var(--color-neutral-foreground,var(--color-neutral-100))] ' +
+        'ring-1 ring-[var(--color-neutral,var(--color-neutral-900))]/30 ring-inset ' +
+        'dark:ring-[var(--color-neutral-foreground,var(--color-neutral-100))]/25 ' +
+        'bg-[var(--color-neutral,var(--color-neutral-950))]/7 ' +
+        'dark:bg-[var(--color-neutral,var(--color-neutral-800))]/95 ' +
+        'focus-visible:outline-[var(--color-neutral,var(--color-neutral-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-neutral-foreground,var(--color-neutral-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-neutral,var(--color-neutral-800))]/15 ' +
+        'dark:in-hover:hover:bg-[var(--color-neutral-foreground,var(--color-neutral-100))]/15',
+    },
+    {
+      color: 'neutral',
+      variant: 'ghost',
+      class:
+        'text-foreground bg-transparent ' +
+        'dark:text-[var(--color-neutral-foreground,var(--color-neutral-100))] ' +
+        'focus-visible:outline-[var(--color-neutral,var(--color-neutral-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-neutral-foreground,var(--color-neutral-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-neutral,var(--color-neutral-800))]/7 ' +
+        'dark:in-hover:hover:bg-[var(--color-neutral-foreground,var(--color-neutral-100))]/10',
+    },
+    {
+      color: 'primary',
+      variant: 'solid',
+      class:
+        'text-background dark:text-foreground bg-[var(--color-primary,var(--color-blue-700))] ' +
+        'focus-visible:outline-[var(--color-primary,var(--color-blue-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-primary,var(--color-blue-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-primary,var(--color-blue-700))]/90 ' +
+        'dark:in-hover:hover:bg-[var(--color-primary,var(--color-blue-700))]/85',
+    },
+    {
+      color: 'primary',
+      variant: 'outline',
+      class:
+        'bg-transparent text-[var(--color-primary,var(--color-blue-700))] ' +
+        'dark:text-[var(--color-primary-foreground,var(--color-blue-600))] ' +
+        'ring-1 ring-[var(--color-primary,var(--color-blue-700))]/30 ring-inset ' +
+        'dark:ring-[var(--color-primary-foreground,var(--color-blue-600))]/25 ' +
+        'focus-visible:outline-[var(--color-primary,var(--color-blue-700))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-primary-foreground,var(--color-blue-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-primary,var(--color-blue-800))]/8 ' +
+        'dark:in-hover:hover:bg-[var(--color-primary-foreground,var(--color-blue-700))]/8',
+    },
+    {
+      color: 'primary',
+      variant: 'soft',
+      class:
+        'text-[var(--color-primary,var(--color-blue-700))] ' +
+        'dark:text-[var(--color-primary-foreground,var(--color-blue-600))] ' +
+        'bg-[var(--color-primary,var(--color-blue-700))]/10 ' +
+        'dark:bg-[var(--color-primary-foreground,var(--color-blue-600))]/10 ' +
+        'focus-visible:outline-[var(--color-primary,var(--color-blue-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-primary-foreground,var(--color-blue-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-primary,var(--color-blue-800))]/15 ' +
+        'dark:in-hover:hover:bg-[var(--color-primary-foreground,var(--color-blue-600))]/15',
+    },
+    {
+      color: 'primary',
+      variant: 'subtle',
+      class:
+        'text-[var(--color-primary,var(--color-blue-700))] ' +
+        'dark:text-[var(--color-primary-foreground,var(--color-blue-600))] ' +
+        'ring-1 ring-[var(--color-primary,var(--color-blue-700))]/30 ring-inset ' +
+        'dark:ring-[var(--color-primary-foreground,var(--color-blue-600))]/25 ' +
+        'bg-[var(--color-primary,var(--color-blue-700))]/10 ' +
+        'dark:bg-[var(--color-primary-foreground,var(--color-blue-600))]/10 ' +
+        'focus-visible:outline-[var(--color-primary,var(--color-blue-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-primary-foreground,var(--color-blue-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-primary,var(--color-blue-800))]/15 ' +
+        'dark:in-hover:hover:bg-[var(--color-primary-foreground,var(--color-blue-600))]/15',
+    },
+    {
+      color: 'primary',
+      variant: 'ghost',
+      class:
+        'bg-transparent text-[var(--color-primary,var(--color-blue-700))] ' +
+        'dark:text-[var(--color-primary-foreground,var(--color-blue-600))] ' +
+        'focus-visible:outline-[var(--color-primary,var(--color-neutral-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-primary-foreground,var(--color-blue-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-primary,var(--color-blue-800))]/10 ' +
+        'dark:in-hover:hover:bg-[var(--color-primary-foreground,var(--color-blue-700))]/10',
+    },
+    {
+      color: 'secondary',
+      variant: 'solid',
+      class:
+        'text-background dark:text-foreground bg-[var(--color-secondary,var(--color-neutral-900))] ' +
+        'dark:bg-[var(--color-secondary,var(--color-neutral-50))] ' +
+        'focus-visible:outline-[var(--color-secondary,var(--color-neutral-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-secondary,var(--color-neutral-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-secondary,var(--color-neutral-900))]/85 ' +
+        'dark:in-hover:hover:bg-[var(--color-secondary,var(--color-neutral-100))]/85',
+    },
+    {
+      color: 'secondary',
+      variant: 'outline',
+      class:
+        'text-secondary dark:text-secondary-foreground bg-transparent ' +
+        'ring-1 ring-[var(--color-secondary,var(--color-neutral-900))]/30 ring-inset ' +
+        'dark:ring-[var(--color-secondary-foreground,var(--color-neutral-100))]/25 ' +
+        'focus-visible:outline-[var(--color-secondary,var(--color-neutral-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-secondary-foreground,var(--color-neutral-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-secondary,var(--color-neutral-900))]/6 ' +
+        'dark:in-hover:hover:bg-[var(--color-secondary-foreground,var(--color-neutral-100))]/8',
+    },
+    {
+      color: 'secondary',
+      variant: 'soft',
+      class:
+        'text-secondary ' +
+        'dark:text-[var(--color-secondary-foreground,var(--color-neutral-100))] ' +
+        'bg-[var(--color-secondary,var(--color-neutral-950))]/5 ' +
+        'dark:bg-[var(--color-secondary-foreground,var(--color-neutral-800))]/10 ' +
+        'focus-visible:outline-[var(--color-secondary,var(--color-neutral-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-secondary-foreground,var(--color-neutral-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-secondary,var(--color-neutral-800))]/10 ' +
+        'dark:in-hover:hover:bg-[var(--color-secondary-foreground,var(--color-neutral-100))]/15',
+    },
+    {
+      color: 'secondary',
+      variant: 'subtle',
+      class:
+        'text-secondary ' +
+        'dark:text-[var(--color-secondary-foreground,var(--color-neutral-100))] ' +
+        'ring-1 ring-[var(--color-secondary,var(--color-neutral-900))]/30 ring-inset ' +
+        'dark:ring-[var(--color-secondary-foreground,var(--color-neutral-100))]/25 ' +
+        'bg-[var(--color-secondary,var(--color-neutral-950))]/7 ' +
+        'dark:bg-[var(--color-secondary-foreground,var(--color-neutral-800))]/10 ' +
+        'focus-visible:outline-[var(--color-secondary,var(--color-neutral-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-secondary-foreground,var(--color-neutral-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-secondary,var(--color-neutral-800))]/15 ' +
+        'dark:in-hover:hover:bg-[var(--color-secondary-foreground,var(--color-neutral-100))]/15',
+    },
+    {
+      color: 'secondary',
+      variant: 'ghost',
+      class:
+        'text-secondary bg-transparent ' +
+        'dark:text-[var(--color-secondary-foreground,var(--color-neutral-100))] ' +
+        'focus-visible:outline-[var(--color-secondary,var(--color-neutral-900))]/30 ' +
+        'dark:focus-visible:outline-[var(--color-secondary-foreground,var(--color-neutral-100))]/30 ' +
+        'in-hover:hover:bg-[var(--color-secondary,var(--color-neutral-800))]/7 ' +
+        'dark:in-hover:hover:bg-[var(--color-secondary-foreground,var(--color-neutral-100))]/10',
+    },
   ],
   defaultVariants: {
     variant: 'solid',
@@ -107,6 +271,10 @@ const props = defineProps({
   variant: {
     type: String as PropType<ButtonVariants['variant']>,
     default: 'solid',
+  },
+  color: {
+    type: String as PropType<ButtonVariants['color']>,
+    default: 'neutral',
   },
   size: {
     type: String as PropType<ButtonVariants['size']>,
@@ -137,6 +305,7 @@ const props = defineProps({
       class: buttonTv({
         variant: props.variant,
         size: props.size,
+        color: props.color,
         icon: props.icon,
         disabled: props.disabled,
         loading: props.loading,

@@ -1,34 +1,44 @@
 <script setup lang="ts">
-import { Button } from '@orcative/ui';
+import { Button, OutlineBox, Placeholder } from '@orcative/ui';
 
-// import { Placeholder } from '../components/placeholder';
-
-type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
-
-const size = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'] as Size[];
+const onClick = () => {
+  document.documentElement.classList.toggle('dark');
+};
 </script>
 
 <template>
-  <!-- <Placeholder /> -->
-  <div class="grid justify-items-start gap-2 p-10 outline-amber-500">
-    <Button>Войти</Button>
-    <!-- <Button variant="subtle">Outline</Button> -->
-  </div>
-  <div class="grid justify-items-start gap-2 p-10">
-    <!-- <Button v-for="value in size" :size="value" variant="outline" :icon="true" :key="value">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <rect width="24" height="24" fill="none" />
-        <path
-          fill="currentColor"
-          fill-rule="evenodd"
-          d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12m10-5.75a.75.75 0 0 1 .75.75v5.19l1.72-1.72a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 1 1 1.06-1.06l1.72 1.72V7a.75.75 0 0 1 .75-.75m-4 10a.75.75 0 0 0 0 1.5h8a.75.75 0 0 0 0-1.5z"
-          clip-rule="evenodd"
-        />
-      </svg>
-    </Button> -->
-  </div>
-  <div class="grid justify-items-start gap-2 p-10">
-    <Button v-for="value in size" :size="value" :key="value" loading> Зарегистрироваться </Button>
+  <div class="flex flex-col items-baseline gap-5 p-5">
+    <OutlineBox class="flex gap-3">
+      <Button color="primary">Solid</Button>
+      <Button color="primary" icon @click="onClick">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+          <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+          <path d="M12 3l0 18"></path>
+          <path d="M12 9l4.65 -4.65"></path>
+          <path d="M12 14.3l7.37 -7.37"></path>
+          <path d="M12 19.6l8.85 -8.85"></path>
+        </svg>
+      </Button>
+      <Button color="primary" variant="outline">Outline</Button>
+      <Button color="primary" variant="soft">Soft</Button>
+      <Button color="primary" variant="subtle">Subtle</Button>
+      <Button color="primary" variant="ghost">Ghost</Button>
+    </OutlineBox>
+    <OutlineBox class="grid grid-cols-2 gap-3">
+      <Placeholder />
+      <Placeholder picture />
+    </OutlineBox>
   </div>
 </template>
 

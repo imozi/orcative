@@ -30,7 +30,7 @@ const attrs = useAttrs();
 const uid = useId();
 
 const placeholderTv = tv({
-  base: 'relative h-full w-full overflow-hidden rounded-sm border-black/10 text-[var(--color-placeholder,var(--color-slate-800))] dark:text-[var(--color-placeholder,var(--color-slate-100))]',
+  base: 'relative h-full w-full overflow-hidden rounded-sm border-[var(--color-border,var(--color-neutral-900))]/20 text-[var(--color-placeholder,var(--color-neutral-900))] dark:border-[var(--color-border,var(--color-neutral-300))]/20 dark:text-[var(--color-placeholder,var(--color-neutral-300))]',
 });
 
 const svgIds = {

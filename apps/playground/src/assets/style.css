@@ -4,18 +4,27 @@
 
 @layer base {
   :root {
-    --background: oklch(100% 0 0deg);
-    --foreground: oklch(12.9% 0.042 264.695deg);
-    --placeholder: oklch(27.9% 0.041 260.031deg);
+    --background: oklch(98.5% 0 0deg);
+    --foreground: oklch(14.5% 0 0deg);
+    --surface: transparent;
+    --neutral: oklch(14.5% 0 0deg);
     --primary: oklch(48.8% 0.243 264.376deg);
-    --neutral: oklch(27.9% 0.041 260.031deg);
-    --radius: 0.5rem;
+    --primary-foreground: oklch(62.3% 0.214 259.815deg);
+    --secondary: oklch(45.7% 0.24 277.023deg);
+    --secondary-foreground: oklch(58.5% 0.233 277.117deg);
+    --border: oklch(14.5% 0 0deg);
+    --radius: 0rem;
+    --duration: 0.25s;
+    --transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dark {
-    --background: oklch(12.9% 0.042 264.695deg);
-    --foreground: oklch(100% 0 0deg);
-    --placeholder: oklch(98.4% 0.003 247.858deg);
+    --background: oklch(14.5% 0 0deg);
+    --foreground: oklch(98.5% 0 0deg);
+    --surface: oklch(20% 0 0deg);
+    --neutral: oklch(26.9% 0 0deg);
+    --neutral-foreground: oklch(97% 0 0deg);
+    --border: oklch(100% 0 0deg);
   }
 
   body {
@@ -29,13 +38,18 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --duration-default: var(--duration);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-placeholder: var(--placeholder);
+  --color-border: var(--border);
+  --color-surface: var(--surface);
+  --color-neutral: var(--neutral);
+  --color-neutral-foreground: var(--neutral-foreground);
 
-  /* --color-primary: var(--primary); */
-
-  /* --color-neutral: var(--neutral); */
+  /* --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground); */
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
 }
 
 html {
