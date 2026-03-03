@@ -18,7 +18,7 @@ export const PrimitiveSlot = defineComponent({
 
       const nonCommentChildIndex = children.findIndex((child) => child.type !== Comment);
 
-      if (nonCommentChildIndex === -1) return null;
+      if (nonCommentChildIndex === -1) return children;
 
       const nonCommentChild = children[nonCommentChildIndex];
 

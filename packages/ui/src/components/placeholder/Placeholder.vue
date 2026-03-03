@@ -1,31 +1,24 @@
-<script setup lang="ts">
+<script lang="ts">
 import { tv } from 'tailwind-variants';
 import { useAttrs, useId, type HTMLAttributes, type PropType } from 'vue';
 
-import { Primitive, type PrimitiveProps } from '../primitive';
+import { Primitive, type ForwardProps, useForwardProps } from '../primitive';
+type PlaceholderProps = ForwardProps<{ picture?: boolean }>;
 
-interface PlaceholderProps extends PrimitiveProps {
-  picture?: boolean;
-}
-
-defineOptions({
-  inheritAttrs: false,
-});
-
-const props = defineProps({
-  asChild: {
-    type: Boolean as PropType<PlaceholderProps['asChild']>,
-    default: false,
-  },
-  as: {
-    type: [String, Object] as PropType<PlaceholderProps['as']>,
-    default: 'div',
-  },
+const forwardProps = useForwardProps({
   picture: {
     type: Boolean as PropType<PlaceholderProps['picture']>,
     default: false,
   },
 });
+</script>
+
+<script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+});
+
+const props = defineProps(forwardProps);
 const attrs = useAttrs();
 const uid = useId();
 

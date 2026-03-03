@@ -128,26 +128,40 @@ type HTMLElements =
   | 'meter'
   | 'progress';
 
-export interface PrimitiveProps {
-  asChild?: boolean;
-  as?: HTMLElements | Component | Raw<Component>;
-}
+type ElementOrComponent = HTMLElements | Component | Raw<Component>;
 
-export const Primitive = defineComponent({
-  name: 'Primitive',
-  props: {
+type PrimitiveProps = {
+  asChild?: boolean;
+  as?: ElementOrComponent;
+};
+
+type PropDefinition = {
+  type: unknown;
+  default?: unknown;
+};
+
+export type ForwardProps<T> = T & PrimitiveProps;
+export const useForwardProps = <T extends Record<string, PropDefinition>>(props: T, as: ElementOrComponent = 'div') => {
+  return {
     asChild: {
       type: Boolean,
       default: false,
     },
     as: {
-      type: [String, Object] as PropType<HTMLElements | Component | Raw<Component>>,
-      default: 'div',
+      type: [String, Object] as PropType<ElementOrComponent>,
+      default: as,
     },
-  },
+    ...props,
+  } as const;
+};
+
+const primitiveTv = tv({ base: '' });
+
+export const Primitive = defineComponent({
+  name: 'Primitive',
+  props: useForwardProps({}),
   setup(props, { attrs, slots }) {
     const asTag = props.asChild ? 'template' : props.as;
-    const primitiveTv = tv({ base: '' });
 
     return () => {
       const attrsWithClass = mergeProps(attrs, { class: primitiveTv({ class: attrs.class as HTMLAttributes['class'] }) });

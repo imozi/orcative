@@ -8,9 +8,18 @@ const onClick = () => {
 
 <template>
   <div class="flex flex-col items-baseline justify-center gap-5 p-5">
+    <OutlineBox class="flex-col">
+      <div class="text-lg font-medium">
+        <h1>Default Card</h1>
+      </div>
+      <div class="text-muted-foreground text-sm">
+        <p>This card uses the default size variant.</p>
+      </div>
+    </OutlineBox>
+
     <OutlineBox class="flex gap-3">
-      <Button color="primary" loading>Solid</Button>
-      <Button color="secondary" icon @click="onClick">
+      <Button color="primary">Solid</Button>
+      <Button color="primary" icon @click="onClick">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -30,11 +39,12 @@ const onClick = () => {
           <path d="M12 19.6l8.85 -8.85"></path>
         </svg>
       </Button>
+      <Button color="secondary">Secondary</Button>
       <Button color="primary" variant="outline">Outline</Button>
       <Button color="primary" variant="soft">Soft</Button>
       <Button color="primary" variant="subtle">Subtle</Button>
       <Button color="primary" variant="ghost">Ghost</Button>
-      <Button variant="link" as-child>
+      <Button variant="link" invalid as-child>
         <a href="#">Link</a>
       </Button>
     </OutlineBox>

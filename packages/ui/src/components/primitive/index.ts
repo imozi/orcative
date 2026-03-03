@@ -1,1 +1,1 @@
-export { Primitive, type PrimitiveProps } from './Primitive';
+export { Primitive, type ForwardProps, useForwardProps } from './Primitive';

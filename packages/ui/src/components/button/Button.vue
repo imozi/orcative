@@ -2,19 +2,10 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 import { useAttrs, type HTMLAttributes, type PropType } from 'vue';
 
-import { Primitive, type PrimitiveProps } from '../primitive';
+import { Primitive, type ForwardProps, useForwardProps } from '../primitive';
 import { Spinner } from '../spinner';
 
-type ButtonVariants = VariantProps<typeof buttonTv>;
-
-interface ButtonProps extends PrimitiveProps {
-  variant: ButtonVariants['variant'];
-  color: ButtonVariants['color'];
-  size: ButtonVariants['size'];
-  icon: ButtonVariants['icon'];
-  disabled: ButtonVariants['disabled'];
-  loading: ButtonVariants['loading'];
-}
+type ButtonProps = ForwardProps<VariantProps<typeof buttonTv>>;
 
 const colorTokens = [
   {
@@ -38,12 +29,12 @@ const colorTokens = [
     fallback: 'orange',
   },
   {
-    base: 'error',
+    base: 'destructive',
     fallback: 'red',
   },
 ];
 
-const generateColorVariants = () => {
+const createColorVariants = () => {
   const schema = colorTokens.reduce(
     (acc, { base, fallback }) => {
       const solid = {
@@ -188,22 +179,23 @@ const generateColorVariants = () => {
   const link = {
     variant: 'link',
     class:
-      `text-[var(--color-link,var(--color-blue-500))] p-0 underline-offset-4 ` +
+      `text-[var(--color-link,var(--color-blue-500))] px-0.5 py-0 h-auto underline-offset-4 ` +
       `focus-visible:outline-none focus-visible:underline in-hover:hover:text-[var(--color-link-foreground,var(--color-blue-600))] ` +
       `in-hover:hover:underline`,
   };
 
-  schema.unshift(...neutral);
-  schema.push(link);
+  schema.push(...neutral, link);
 
   return schema;
 };
+
+const colorVariants = createColorVariants();
 
 const buttonTv = tv({
   base:
     'inline-flex cursor-pointer items-center justify-center rounded-md font-medium transition-all ' +
     'duration-(--duration-default) ease-(--transition-easing) focus-visible:outline-4 active:translate-y-0.5 ' +
-    'bg- has-[>svg]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+    'has-[>svg]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   variants: {
     color: {
       neutral: '',
@@ -212,7 +204,7 @@ const buttonTv = tv({
       success: '',
       info: '',
       warning: '',
-      error: '',
+      destructive: '',
     },
     variant: {
       solid: '',
@@ -241,13 +233,43 @@ const buttonTv = tv({
       true: 'has-[>svg]:p-1.5',
     },
   },
-  compoundVariants: generateColorVariants(),
+  compoundVariants: colorVariants,
   defaultVariants: {
     variant: 'solid',
     color: 'neutral',
     size: 'sm',
   },
 });
+
+const forwardProps = useForwardProps(
+  {
+    variant: {
+      type: String as PropType<ButtonProps['variant']>,
+      default: 'solid',
+    },
+    color: {
+      type: String as PropType<ButtonProps['color']>,
+      default: 'neutral',
+    },
+    size: {
+      type: String as PropType<ButtonProps['size']>,
+      default: 'sm',
+    },
+    icon: {
+      type: Boolean as PropType<ButtonProps['icon']>,
+      default: false,
+    },
+    disabled: {
+      type: Boolean as PropType<ButtonProps['disabled']>,
+      default: false,
+    },
+    loading: {
+      type: Boolean as PropType<ButtonProps['loading']>,
+      default: false,
+    },
+  },
+  'button',
+);
 </script>
 
 <script setup lang="ts">
@@ -257,40 +279,7 @@ defineOptions({
 
 const attrs = useAttrs();
 
-const props = defineProps({
-  asChild: {
-    type: Boolean as PropType<ButtonProps['asChild']>,
-    default: false,
-  },
-  as: {
-    type: [String, Object] as PropType<ButtonProps['as']>,
-    default: 'button',
-  },
-  variant: {
-    type: String as PropType<ButtonVariants['variant']>,
-    default: 'solid',
-  },
-  color: {
-    type: String as PropType<ButtonVariants['color']>,
-    default: 'neutral',
-  },
-  size: {
-    type: String as PropType<ButtonVariants['size']>,
-    default: 'sm',
-  },
-  icon: {
-    type: Boolean as PropType<ButtonVariants['icon']>,
-    default: false,
-  },
-  disabled: {
-    type: Boolean as PropType<ButtonVariants['disabled']>,
-    default: false,
-  },
-  loading: {
-    type: Boolean as PropType<ButtonVariants['loading']>,
-    default: false,
-  },
-});
+const props = defineProps(forwardProps);
 </script>
 
 <template>

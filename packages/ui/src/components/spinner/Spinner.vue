@@ -2,13 +2,19 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 import { useAttrs, type HTMLAttributes, type PropType } from 'vue';
 
-import { Primitive, type PrimitiveProps } from '../primitive';
+import { Primitive, type ForwardProps, useForwardProps } from '../primitive';
 
-type SpinnerVariants = VariantProps<typeof spinnerTv>;
+type SpinnerProps = ForwardProps<VariantProps<typeof spinnerTv>>;
 
-interface SpinnerProps extends PrimitiveProps {
-  size: SpinnerVariants['size'];
-}
+const forwardProps = useForwardProps(
+  {
+    size: {
+      type: String as PropType<SpinnerProps['size']>,
+      default: 'sm',
+    },
+  },
+  'svg',
+);
 
 const spinnerTv = tv({
   base: 'fill-current',
@@ -33,20 +39,7 @@ defineOptions({
 
 const attrs = useAttrs();
 
-const props = defineProps({
-  asChild: {
-    type: Boolean as PropType<SpinnerProps['asChild']>,
-    default: false,
-  },
-  as: {
-    type: [String, Object] as PropType<SpinnerProps['as']>,
-    default: 'svg',
-  },
-  size: {
-    type: String as PropType<SpinnerProps['size']>,
-    default: 'sm',
-  },
-});
+const props = defineProps(forwardProps);
 </script>
 
 <template>
